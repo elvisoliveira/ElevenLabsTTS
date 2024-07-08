@@ -20,11 +20,10 @@ class ElevenLabsService(
     private val voiceId: String = "nPczCjzI2devNBz1zQrb"
 ) {
     private val client = OkHttpClient().newBuilder()
-        .callTimeout(10, TimeUnit.SECONDS)  // Set the timeout to 60 seconds
+        .callTimeout(10, TimeUnit.SECONDS)
         .build()
     private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
-    @Throws(IOException::class)
     fun textToSpeech(text: String): ByteArray {
         val url = "https://api.elevenlabs.io/v1/text-to-speech/$voiceId?optimize_streaming_latency=0"
 
@@ -45,7 +44,6 @@ class ElevenLabsService(
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
             return response.body!!.bytes()
         }
     }
